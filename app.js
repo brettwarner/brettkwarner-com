@@ -32,7 +32,11 @@ if ('development' == app.get('env')) {
 }
 
 require('./app/routes.js')(app);
-//app.get('/', routes.index);
+app.get('/', function(req,res){
+	res.render("index", {test1: "Test Here", posts:[{title: "Post 1", body: "Post 1 Body "},{title: "Post2", body: "Post 2 Body"}]});
+});
+
+//app.get("/", routes.index)
 //app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
