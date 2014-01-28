@@ -41,6 +41,15 @@ app.get('/', function(req,res){
 	});
 });
 
+
+// This is what I'm currently working on. Will pull a post based on title.
+app.get('/posts/:postTitle', function(req,res){
+	BlogPost.find(function(err, thePosts){
+		console.log(thePosts);
+		console.log(req.params.postTitle);
+		res.render("index", {title: req.params.postTitle, test1: "Test Here", posts: thePosts});
+	});
+});
 //app.get("/", routes.index)
 //app.get('/users', user.list);
 
