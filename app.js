@@ -3,15 +3,16 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var mongoose = require('mongoose');
-var database = require('./config/database');
+ var express = require('express');
+ var mongoose = require('mongoose');
+ var database = require('./config/database');
 //var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var app = express();
-
+var BlogPage = require('./app/models/pages');
+var BlogPost = require('./app/models/posts');
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -28,17 +29,21 @@ mongoose.connect(database.url);
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 require('./app/routes.js')(app);
+
 app.get('/', function(req,res){
-	res.render("index", {title: "DinoLand", test1: "Test Here", posts:[{title: "Post 1", body: "Post 1 Body "},{title: "Post2", body: "Post 2 Body"}]});
+	BlogPost.find(function(err, thePosts){
+		console.log(thePosts);
+		res.render("index", {title: "DinoLand", test1: "Test Here", posts: thePosts});
+	});
 });
 
 //app.get("/", routes.index)
 //app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });

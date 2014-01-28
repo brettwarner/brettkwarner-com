@@ -1,0 +1,15 @@
+doctype xml
+rss(version='2.0', xmlns:atom='<a href="http://www.w3.org/2005/Atom" rel="nofollow">http://www.w3.org/2005/Atom</a>')
+    channel
+    	title title
+    	link <a href-"http://www.brettkwarner.com" rel="nofollow">http://www.brettkwarner.com</a>
+    	description description
+    	lastBuildDate
+    	language en-US
+    	sy:updatePeriod hourly
+    	sy:updateFrequency 1
+    	for post in posts
+    		item
+    			title post.postTitle
+    			pubDate post.postDate
+
