@@ -2,7 +2,10 @@ extends layout
 
 block content
   h1 #{siteTitle}
-  p Welcome to #{test1}
+  p Here's what I've been up to...
   for post in posts
-    h2 #{post.postName}
-    p #{post.postBody}
+    span#postDate #{post.postDate}
+    span#postTitle
+      a(href='posts/#{postUrl}')  #{post.postName}
+      br/
+      br/

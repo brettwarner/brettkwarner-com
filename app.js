@@ -47,7 +47,7 @@ app.get('/posts/:postTitle', function(req,res){
 	BlogPost.find(function(err, thePosts){
 		console.log(thePosts);
 		console.log(req.params.postTitle);
-		res.render("index", {title: req.params.postTitle, test1: "Test Here", posts: thePosts});
+		res.render("post", {title: req.params.postTitle, test1: "Test Here", posts: thePosts});
 	});
 });
 //app.get("/", routes.index)
