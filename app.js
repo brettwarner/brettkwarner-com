@@ -25,7 +25,21 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-mongoose.connect(database.url);
+var monOptions = {
+  server:{
+    auto_reconnect: true,
+      poolSize: 10,
+      socketOptions:{
+      keepAlive: 1
+    }
+  },
+  db: {
+    numberOfRetries: 10,
+    retryMiliSeconds: 1000
+  }
+}
+
+mongoose.connect(database.url, monOptions);
 
 // development only
 if ('development' == app.get('env')) {
