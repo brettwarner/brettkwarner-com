@@ -41,7 +41,19 @@ app.get('/', function(req,res){
 	});
 });
 
+app.get('/:pageSlug', function(req, res){
 
+	BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
+		if(!thePage){
+			console.log("the error" + err);
+			res.send("Not found");
+		}else{
+			console.log(thePage);
+			console.log(req.params.pageTitle);
+			res.render("page", {title: thePage.pageName, body: thePage.pageBody});
+		}
+	});
+});
 // This is what I'm currently working on. Will pull a post based on title.
 app.get('/posts/:postSlug', function(req,res){
 
@@ -60,19 +72,8 @@ app.get('/posts/:postSlug', function(req,res){
 //app.get('/users', user.list);
 
 
-// Weird Error Handling Code I stole from here:
-//
-
-// "app.router" positions our routes
-// above the middleware defined below,
-// this means that Express will attempt
-// to match & call routes _before_ continuing
-// on, at which point we assume it's a 404 because
-// no route has handled the request.
-
-// Since this is the last non-error-handling
-// middleware use()d, we assume 404, as nothing else
-// responded.
+// Error Handling Code I stole from here:
+// https://github.com/visionmedia/express/blob/master/examples/error-pages/index.js
 
 
 app.use(function(req, res, next){
