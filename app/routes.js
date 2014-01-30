@@ -10,6 +10,7 @@ module.exports = function(app){
 			console.log("content type post");
 			BlogPost.create({
 				postName: req.body['content-title'],
+				postSlug: req.body['content-slug'],
 				postDate : new Date(),
 				postAuthor : "Brett Warner",
 				postBody: req.body['content-body']
