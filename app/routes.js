@@ -1,5 +1,6 @@
 var BlogPost = require('./models/posts');
 var BlogPage = require('./models/pages'); 
+var marked = require('marked');
 
 module.exports = function(app){
 
@@ -14,7 +15,7 @@ app.post('/api/addcontent', function(req, res){
 			postSlug: req.body['content-slug'],
 			postDate : new Date(),
 			postAuthor : "Brett Warner",
-			postBody: req.body['content-body']
+			postBody: marked(req.body['content-body'])
 		}, function(err, success){
 			if(err)
 				res.send(err);
@@ -29,7 +30,7 @@ app.post('/api/addcontent', function(req, res){
 			pageSlug: req.body['content-slug'],
 			pageDate : new Date(),
 			pageAuthor : "Brett Warner",
-			pageBody: req.body['content-body']
+			pageBody: marked(req.body['content-body'])
 		}, function(err, success){
 			if(err)
 				res.send(err);
