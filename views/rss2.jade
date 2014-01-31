@@ -1,0 +1,23 @@
+doctype xml
+rss(version='2.0',
+    xmlns:content='http://purl.org/rss/1.0/modules/content/',
+    xmlns:wfw='http://wellformedweb.org/CommentAPI/',
+    xmlns:dc='http://purl.org/dc/elements/1.1/'
+    xmlns:atom='http://www.w3.org/2005/Atom')
+  channel
+    title TITLE
+    atom:link(href='brettkwarner.com/feed.xml', rel='self', type='application/rss+xml')
+    link locals.url
+    description Happy Description
+    pubDate= new Date().toUTCString()
+    generator Wintersmith - https://github.com/jnordberg/wintersmith
+    language en
+    for post in posts
+      item
+        title= post.postName
+        link= post.postSlug
+        pubDate= new Date().toUTCString()
+        guid(isPermaLink='true') http://brettkwarner.com/blog/#{post.postSlug}
+        author Brett Warner
+        //- passing locals.url resolves all relative urls to absolute
+        description muahahahha
