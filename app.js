@@ -55,6 +55,16 @@ app.get('/', function(req,res){
 	});
 });
 
+// RSS Feed
+app.get('/rss', function(req, res){
+	BlogPost.find(function(err, thePosts){
+		console.log("Grabb Rss feed")
+		console.log(thePosts);
+		res.render("rss2", {posts: thePosts})
+	});
+});
+
+
 app.get('/:pageSlug', function(req, res){
 
 	BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
@@ -69,7 +79,7 @@ app.get('/:pageSlug', function(req, res){
 	});
 });
 // This is what I'm currently working on. Will pull a post based on title.
-app.get('/posts/:postSlug', function(req,res){
+app.get('/blog/:postSlug', function(req,res){
 
 	BlogPost.findOne({ postSlug: req.params.postSlug }, function(err, thePost){
 		if(!thePost){
@@ -82,6 +92,7 @@ app.get('/posts/:postSlug', function(req,res){
 		}
 	});
 });
+
 //app.get("/", routes.index)
 //app.get('/users', user.list);
 
