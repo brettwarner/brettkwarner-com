@@ -50,47 +50,49 @@ module.exports = function(app){
 		}
 	});
 
-	//Edits a piece of content
+	//Edits a piece of content needs to be done still
 	app.post("/api/editcontent", function(req, res){
 		console.log("Editing a Piece of Content!")
 	});
 
-	//Deletes a post
+	//Deletes a post needs to be done still
 	app.post("/api/editcontent", function(req, res){
 		console.log("Deleting a Post!")
 	})
+
+
 	app.get('/rss', function(req, res){
 		var feed = new Feed({
 			title: 'Brett Warner',
 			description: 'Stuff I break.',
 			link: 'http://www.brettkwarner.com',
-		//image: 'image'
-		copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
+		    //image: 'image'
+		    copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
 
-		author: {
-			name: 'Brett Warner',
-			email: 'brett@brettkwarner.com',
-			link: 'http://www.brettkwarner.com'
-		}
-	});
+		    author: {
+		    	name: 'Brett Warner',
+		    	email: 'brett@brettkwarner.com',
+		    	link: 'http://www.brettkwarner.com'
+		    }
+		});
 
 		BlogPost.find(function(err, thePosts){
 			for(var blogPost in thePosts){
 				feed.addItem({
 					title: thePosts[blogPost].postName,
 					link: 'http://www.brettkwarner.com' + thePosts[blogPost].postSlug,
-					description: 'still testing',
+					description: thePosts[blogPost].postBody,
 					date: thePosts[blogPost].postDate
 				});
 			}
-		//res.set('Content-Type', 'text/xml');
-		res.set('Content-Type', 'application/rss+xml');
-        // Sending the feed as a response
-        res.send(feed.render('rss-2.0'));
-    });
+	      	//res.set('Content-Type', 'text/xml');
+	      	res.set('Content-Type', 'application/rss+xml');
+            // Sending the feed as a response
+            res.send(feed.render('rss-2.0'));
+        });
 	});
 
-
+	// Pulls a page based on the slug
 	app.get('/:pageSlug', function(req, res){
 
 		BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
@@ -105,17 +107,17 @@ module.exports = function(app){
 		});
 	});
 
-// This is what I'm currently working on. Will pull a post based on title.
-app.get('/blog/:postSlug', function(req,res){
-	BlogPost.findOne({ postSlug: req.params.postSlug }, function(err, thePost){
-		if(!thePost){
-			console.log("The error"+ err);
-			res.send('Not found');
-		}else{
-			console.log(thePost);
-			console.log(req.params.postTitle);
-			res.render("post", {title: thePost.postName, body: thePost.postBody});
-		}
+	// Pulls a post based on the slug.
+	app.get('/blog/:postSlug', function(req,res){
+		BlogPost.findOne({ postSlug: req.params.postSlug }, function(err, thePost){
+			if(!thePost){
+				console.log("The error"+ err);
+				res.send('Not found');
+			}else{
+				console.log(thePost);
+				console.log(req.params.postTitle);
+				res.render("post", {title: thePost.postName, body: thePost.postBody});
+			}
+		});
 	});
-});
 }
