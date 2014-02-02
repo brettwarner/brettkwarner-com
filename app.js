@@ -6,6 +6,7 @@
  var express = require('express');
  var mongoose = require('mongoose');
  var database = require('./config/database');
+ var Feed = require('feed');
 //var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');
@@ -26,17 +27,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 var monOptions = {
-  server:{
-    auto_reconnect: true,
-      poolSize: 10,
-      socketOptions:{
-      keepAlive: 1
-    }
-  },
-  db: {
-    numberOfRetries: 10,
-    retryMiliSeconds: 1000
-  }
+	server:{
+		auto_reconnect: true,
+		poolSize: 10,
+		socketOptions:{
+			keepAlive: 1
+		}
+	},
+	db: {
+		numberOfRetries: 10,
+		retryMiliSeconds: 1000
+	}
 }
 
 mongoose.connect(database.url, monOptions);
@@ -57,11 +58,34 @@ app.get('/', function(req,res){
 
 // RSS Feed
 app.get('/rss', function(req, res){
-	BlogPost.find(function(err, thePosts){
-		console.log("Grabb Rss feed")
-		console.log(thePosts);
-		res.render("rss2", {posts: thePosts})
+	var feed = new Feed({
+		title: 'Brett Warner',
+		description: 'Stuff I break.',
+		link: 'http://www.brettkwarner.com',
+		//image: 'image'
+		copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
+
+		author: {
+			name: 'Brett Warner',
+			email: 'brett@brettkwarner.com',
+			link: 'http://www.brettkwarner.com'
+		}
 	});
+
+	BlogPost.find(function(err, thePosts){
+		for(var blogPost in thePosts){
+			feed.addItem({
+				title: thePosts[blogPost].postName,
+				link: 'http://www.brettkwarner.com' + thePosts[blogPost].postSlug,
+				description: 'still testing',
+				date: thePosts[blogPost].postDate
+			});
+		}
+		//res.set('Content-Type', 'text/xml');
+		res.set('Content-Type', 'application/rss+xml');
+        // Sending the feed as a response
+        res.send(feed.render('rss-2.0'));
+    });
 });
 
 
@@ -78,9 +102,9 @@ app.get('/:pageSlug', function(req, res){
 		}
 	});
 });
+
 // This is what I'm currently working on. Will pull a post based on title.
 app.get('/blog/:postSlug', function(req,res){
-
 	BlogPost.findOne({ postSlug: req.params.postSlug }, function(err, thePost){
 		if(!thePost){
 			console.log("The error"+ err);
@@ -102,19 +126,19 @@ app.get('/blog/:postSlug', function(req,res){
 
 
 app.use(function(req, res, next){
-  res.status(404);
+	res.status(404);
 
   // respond with html page
   if (req.accepts('html')) {
    // res.render('404', { url: req.url });
    res.send('Not found');
-    return;
-  }
+   return;
+}
 
   // respond with json
   if (req.accepts('json')) {
-    res.send({ error: 'Not found' });
-    return;
+  	res.send({ error: 'Not found' });
+  	return;
   }
 
   // default to plain-text. send()

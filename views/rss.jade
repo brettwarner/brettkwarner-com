@@ -1,18 +1,18 @@
 doctype xml
-rss(version='2.0', xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/")
-    channel
-        title Brett Warner
-        link http://www.brettkwarner.com/
-        description Changing shit and breaking things
-        lastBuildDate= new Date().toUTCString()
-        language en-US
-        sy:updatePeriod hourly
-        sy:updateFrequency 1
-        each post in posts
-            item
-                title #{post.postName}
-                link http://www.brettkwarner.com/#{post.postSlug}
-                description pie
-                pubDate= post.postDate.toUTCString()
-                guid(isPermaLink='false') http://brettkwarner.com/blog/#{post.postSlug}
-
+xml
+    rss(version='2.0', xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/")
+        channel
+            title Brett Warner
+            link http://www.brettkwarner.com/
+            description Changing shit and breaking things
+            lastBuildDate= new Date().toUTCString()
+            language en-US
+            sy:updatePeriod hourly
+            sy:updateFrequency 1
+            each post in posts
+                item
+                    title #{post.postName}
+                    link http://www.brettkwarner.com/#{post.postSlug}
+                    description pie
+                    pubDate= post.postDate.toUTCString()
+                    guid(isPermaLink='false') http://brettkwarner.com/blog/#{post.postSlug}

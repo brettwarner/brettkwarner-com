@@ -10,6 +10,7 @@
     "mongoose": "*",
     "jade": "*",
     "passport": "~0.2.0",
-    "marked": "~0.3.0"
+    "marked": "~0.3.*",
+    "feed": "~0.2.6"
   }
 }
