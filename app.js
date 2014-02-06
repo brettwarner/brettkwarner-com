@@ -1,15 +1,14 @@
-
 /**
  * Module dependencies.
  */
-
  var express = require('express');
  var mongoose = require('mongoose');
  var database = require('./config/database');
  var Feed = require('feed');
+ var users = require('./app/models/users.js');
 //var routes = require('./routes');
 //var user = require('./routes/user');
-var http = require('http');
+var http = require('http');  
 var path = require('path');
 var app = express();
 var BlogPage = require('./app/models/pages');
@@ -22,9 +21,45 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(app.router); 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//Passport Stuff
+var passport = require("passport");
+var LocalStrategy = require('passport-local').Strategy;
+
+// Not sure if I need this
+app.use(express.cookieParser());
+// app.use(express.session({secret: "SECRET"}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router); 
+
+passport.use(new LocalStrategy(
+	function(username, password, done){
+		users.findOne({username: username}, function(err, user){
+			if(err){ return done(err);}
+			if(!user){
+				console.log("no user");
+				return done(null, false, { message: "Incorrect username"});
+			}
+			if(password !== user.password){
+				console.log("bad pass");
+				return done(null, false, {message: "Incorrect password."});
+			}
+			return done(null, user);
+		});
+	}
+	));
+
+app.post('/admin/login',
+	passport.authenticate('local',{ 
+		successRedirect: '/createnew.html',
+		failureRedirect: 'admin/login.html',
+		failureFlash: false})
+
+	); 
 
 var monOptions = {
 	server:{
