@@ -1,0 +1,18 @@
+extends layout
+
+block content
+   h1.pagetitle Create Your World
+   .col-sm-8
+    form(method='POST', action='/api/addcontent')
+        p Content Title:
+        input(type='text', name='content-title')
+        p Content Slug:
+        input(type='text', name='content-slug')
+        p Content Body:
+        textarea(name='content-body')
+        p Content Type:
+        select(name='content-type')
+            option(value='post') Post
+            option(value='page') Page
+        p
+            button(type='submit') Create Something Awesome!

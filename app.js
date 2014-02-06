@@ -109,7 +109,7 @@ app.get('/', function(req,res){
 app.get('/admin/createnew', ensureAuthenticated, function(req,res){
 	console.log("okay so we got this far..");
 	console.log(req + "success?");	
-	res.render("page", {title: 'Success bitches!', user: req.user});
+	res.render("admin", {title: 'Success!', user: req.user});
 		//res.render("addpost", {title: "Add a post" });
 });
 
@@ -210,5 +210,5 @@ http.createServer(app).listen(app.get('port'), function(){
 
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) { return next(); }
-	res.redirect('/admin/login')
+	res.redirect('/admin/login.html')
 }
