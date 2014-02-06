@@ -14,7 +14,8 @@ module.exports = function(app){
 		smartLists: true,
 		smartypants: false
 	});
-	app.post('/api/addcontent', function(req, res){
+	app.post('/api/addcontent', ensureAuthenticated, function(req, res){
+
 		console.log("Adding Something Awesome!");
 		console.log(req.body);
 		if(req.body['content-type'] === "post"){
@@ -121,3 +122,9 @@ module.exports = function(app){
 		});
 	});
 }
+
+function ensureAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) { return next(); }
+	res.redirect('/admin/login')
+}
+
