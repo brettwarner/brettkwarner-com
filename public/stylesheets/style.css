@@ -11,3 +11,8 @@ a {
 .pagetitle{
 	padding-bottom: 25px;
 }
+
+.markdowntext{
+	width: 600px; 
+	height: 300px
+}
