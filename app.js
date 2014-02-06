@@ -13,6 +13,7 @@ var path = require('path');
 var app = express();
 var BlogPage = require('./app/models/pages');
 var BlogPost = require('./app/models/posts');
+var hashSecret = require('./config/hashsecret');
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -31,10 +32,20 @@ var LocalStrategy = require('passport-local').Strategy;
 
 // Not sure if I need this
 app.use(express.cookieParser());
-// app.use(express.session({secret: "SECRET"}));
+app.use(express.session({secret: hashSecret}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router); 
+
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+	users.findById(id, function(err, user) {
+		done(err, user);
+	});
+});
 
 passport.use(new LocalStrategy(
 	function(username, password, done){
@@ -55,10 +66,12 @@ passport.use(new LocalStrategy(
 
 app.post('/admin/login',
 	passport.authenticate('local',{ 
-		successRedirect: '/createnew.html',
+		successRedirect: 'admin/createnew',
 		failureRedirect: 'admin/login.html',
-		failureFlash: false})
-
+		// Need to get connect-flash https://github.com/jaredhanson/connect-flash
+		// failureFlash: 'Invalid username or password.',
+		// successFlash: 'Welcome home!'
+	})
 	); 
 
 var monOptions = {
@@ -87,8 +100,17 @@ require('./app/routes.js')(app);
 app.get('/', function(req,res){
 	BlogPost.find(function(err, thePosts){
 		console.log(thePosts);
-		res.render("index", {title: "DinoLand", test1: "Test Here", posts: thePosts});
+		res.render("index", {title: "DinoLand", test1: "Test Here", posts: thePosts, user: req.user});
 	});
+});
+
+// Add a post page
+
+app.get('/admin/createnew', ensureAuthenticated, function(req,res){
+	console.log("okay so we got this far..");
+	console.log(req + "success?");	
+	res.render("page", {title: 'Success bitches!', user: req.user});
+		//res.render("addpost", {title: "Add a post" });
 });
 
 // RSS Feed
@@ -133,7 +155,7 @@ app.get('/:pageSlug', function(req, res){
 		}else{
 			console.log(thePage);
 			console.log(req.params.pageTitle);
-			res.render("page", {title: thePage.pageName, body: thePage.pageBody});
+			res.render("page", {title: thePage.pageName, body: thePage.pageBody, user: req.user});
 		}
 	});
 });
@@ -147,7 +169,7 @@ app.get('/blog/:postSlug', function(req,res){
 		}else{
 			console.log(thePost);
 			console.log(req.params.postTitle);
-			res.render("post", {title: thePost.postName, body: thePost.postBody});
+			res.render("post", {title: thePost.postName, body: thePost.postBody, user: req.user});
 		}
 	});
 });
@@ -185,3 +207,8 @@ app.use(function(req, res, next){
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
+
+function ensureAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) { return next(); }
+	res.redirect('/admin/login')
+}
