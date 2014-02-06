@@ -5,5 +5,6 @@ module.exports = mongoose.model('Posts', {
 	postSlug: {type: String, index: {unique: true, dropDups: true }},
 	postDate : Date,
 	postAuthor : String,
-	postBody: String
+	postBody: String,
+	postMarkdown: String
 });

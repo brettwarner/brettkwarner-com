@@ -5,5 +5,6 @@ module.exports = mongoose.model('Pages', {
 	pageSlug: {type: String, index: {unique: true, dropDups: true }},
 	pageDate : Date,
 	pageAuthor : String,
-	pageBody: String
+	pageBody: String,
+	pageMarkdown: String
 });

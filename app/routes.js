@@ -25,7 +25,8 @@ module.exports = function(app){
 				postSlug: req.body['content-slug'],
 				postDate : new Date(),
 				postAuthor : "Brett Warner",
-				postBody: marked(req.body['content-body'])
+				postBody: marked(req.body['content-body']),
+				pageMarkdown: req.body['content-body']
 			}, function(err, success){
 				if(err)
 					res.send(err);
@@ -40,7 +41,8 @@ module.exports = function(app){
 				pageSlug: req.body['content-slug'],
 				pageDate : new Date(),
 				pageAuthor : "Brett Warner",
-				pageBody: marked(req.body['content-body'])
+				pageBody: marked(req.body['content-body']),
+				pageMarkdown: req.body['content-body']
 			}, function(err, success){
 				if(err)
 					res.send(err);
