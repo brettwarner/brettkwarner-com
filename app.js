@@ -1,10 +1,10 @@
 /**
  * Module dependencies.
  */
-var express = require('express');
-var mongoose = require('mongoose');
-var database = require('./config/database');
-var users = require('./app/models/users.js');
+ var express = require('express');
+ var mongoose = require('mongoose');
+ var database = require('./config/database');
+ var users = require('./app/models/users.js');
 //var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');  
@@ -62,17 +62,13 @@ passport.use(new LocalStrategy(
 		});
 	}
 	));
-
-app.post('/admin/login',
-	passport.authenticate('local',{ 
+app.post('/admin/login', 
+	passport.authenticate('local',
+	{
 		successRedirect: 'admin/createnew',
-		failureRedirect: 'admin/login.html',
-		// Need to get connect-flash https://github.com/jaredhanson/connect-flash
-		// failureFlash: 'Invalid username or password.',
-		// successFlash: 'Welcome home!'
+		failureRedirect: 'admin/login.html'
 	})
-	); 
-
+	);
 var monOptions = {
 	server:{
 		auto_reconnect: true,

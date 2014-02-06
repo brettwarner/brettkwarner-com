@@ -31,7 +31,6 @@ app.get('/admin/createnew', ensureAuthenticated, function(req,res){
 	console.log(req + "success?");	
 	res.render("admin", {title: 'Success!', user: req.user});
 });
-
 app.post('/api/addcontent', ensureAuthenticated, function(req, res){
 
 	console.log("Adding Something Awesome!");
