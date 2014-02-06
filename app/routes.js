@@ -1,57 +1,75 @@
 var BlogPost = require('./models/posts');
 var BlogPage = require('./models/pages'); 
 var marked = require('marked');
+var Feed = require('feed');
+var ensureAuthenticated = require('./ensureAuthenticated');
 
+marked.setOptions({
+	renderer: new marked.Renderer(),
+	gfm: true,
+	tables: true,
+	breaks: false,
+	pedantic: false,
+	sanitize: true,
+	smartLists: true,
+	smartypants: false
+});
 // Adds a new post!
 module.exports = function(app){
-	marked.setOptions({
-		renderer: new marked.Renderer(),
-		gfm: true,
-		tables: true,
-		breaks: false,
-		pedantic: false,
-		sanitize: true,
-		smartLists: true,
-		smartypants: false
+	
+	app.get('/', function(req,res){
+		BlogPost.find(function(err, thePosts){
+			console.log(thePosts);
+			res.render("index", {title: "DinoLand", test1: "Test Here", posts: thePosts, user: req.user});
+		});
 	});
-	app.post('/api/addcontent', ensureAuthenticated, function(req, res){
 
-		console.log("Adding Something Awesome!");
-		console.log(req.body);
-		if(req.body['content-type'] === "post"){
-			console.log("content type post");
-			BlogPost.create({
-				postName: req.body['content-title'],
-				postSlug: req.body['content-slug'],
-				postDate : new Date(),
-				postAuthor : "Brett Warner",
-				postBody: marked(req.body['content-body']),
-				pageMarkdown: req.body['content-body']
-			}, function(err, success){
-				if(err)
-					res.send(err);
-				BlogPost.find(function(err, posts){
-					res.send(posts);
-				})
-			});
-		}else if(req.body['content-type'] ==="page"){
-			console.log("content type page");
-			BlogPage.create({
-				pageName: req.body['content-title'],
-				pageSlug: req.body['content-slug'],
-				pageDate : new Date(),
-				pageAuthor : "Brett Warner",
-				pageBody: marked(req.body['content-body']),
-				pageMarkdown: req.body['content-body']
-			}, function(err, success){
-				if(err)
-					res.send(err);
-				BlogPage.find(function(err,pages){
-					res.send(pages);
-				})
-			});
-		}
-	});
+// Add a post page
+
+app.get('/admin/createnew', ensureAuthenticated, function(req,res){
+	console.log("okay so we got this far..");
+	console.log(req + "success?");	
+	res.render("admin", {title: 'Success!', user: req.user});
+});
+
+app.post('/api/addcontent', ensureAuthenticated, function(req, res){
+
+	console.log("Adding Something Awesome!");
+	console.log(req.body);
+	if(req.body['content-type'] === "post"){
+		console.log("content type post");
+		BlogPost.create({
+			postName: req.body['content-title'],
+			postSlug: req.body['content-slug'],
+			postDate : new Date(),
+			postAuthor : "Brett Warner",
+			postBody: marked(req.body['content-body']),
+			postMarkdown: req.body['content-body']
+		}, function(err, success){
+			if(err)
+				res.send(err);
+			BlogPost.find(function(err, posts){
+				res.send(posts);
+			})
+		});
+	}else if(req.body['content-type'] ==="page"){
+		console.log("content type page");
+		BlogPage.create({
+			pageName: req.body['content-title'],
+			pageSlug: req.body['content-slug'],
+			pageDate : new Date(),
+			pageAuthor : "Brett Warner",
+			pageBody: marked(req.body['content-body']),
+			pageMarkdown: req.body['content-body']
+		}, function(err, success){
+			if(err)
+				res.send(err);
+			BlogPage.find(function(err,pages){
+				res.send(pages);
+			})
+		});
+	}
+});
 
 	//Edits a piece of content needs to be done still
 	app.post("/api/editcontent", function(req, res){
@@ -125,8 +143,5 @@ module.exports = function(app){
 	});
 }
 
-function ensureAuthenticated(req, res, next) {
-	if (req.isAuthenticated()) { return next(); }
-	res.redirect('/admin/login')
-}
+
 
