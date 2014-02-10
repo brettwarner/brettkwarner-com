@@ -121,7 +121,7 @@ app.get('/:pageSlug', function(req, res){
 			}else{
 				console.log(thePage);
 				console.log(req.params.pageTitle);
-				res.render('page', {title: thePage.pageName, body: thePage.pageBody});
+				res.render('page', {title: thePage.pageName, body: thePage.pageBody, slug: req.params.pageSlug, user: req.user});
 			}
 		});
 	});
@@ -137,7 +137,7 @@ app.get('/blog/:postSlug', function(req,res){
 			}else{
 				console.log(thePost);
 				console.log(req.params.postTitle);
-				res.render("post", {title: thePost.postName, body: thePost.postBody});
+				res.render("post", {title: thePost.postName, slug: req.params.postSlug, body: thePost.postBody,  user: req.user});
 			}
 		});
 	});
@@ -236,7 +236,7 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 					res.send('Post Not found');
 				}else{
 					console.log(thePost);
-					res.render("editor", {title: thePost.postName, content: thePost.postMarkdown, slug: thePost.postSlug, type: 'post'});
+					res.render("editor", {title: thePost.postName, content: thePost.postMarkdown, slug: thePost.postSlug, type: 'post',  user: req.user});
 				}
 			});
 
@@ -249,7 +249,7 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 					res.send('Page Not found');
 				}else{
 					console.log(thePage);
-					res.render('editor', {title: thePage.pageName, content: thePage.pageMarkdown, slug: thePage.pageSlug, type: 'page'  });
+					res.render('editor', {title: thePage.pageName, content: thePage.pageMarkdown, slug: thePage.pageSlug, type: 'page',  user: req.user});
 				}
 			});
 

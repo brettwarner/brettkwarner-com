@@ -4,3 +4,6 @@ block content
    h1.pagetitle #{title}
    .col-sm-8
     != body
+    if(user)
+     a(href='../admin/edit/post-' + slug)  Edit
+    
