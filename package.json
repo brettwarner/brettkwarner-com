@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "My Home Blog",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "express": "3.4.3",
     "mongoose": "*",
     "jade": "*",
-    "passport": "~0.2.0",
+    "passport": "~0.2.*",
     "marked": "~0.3.*",
     "feed": "~0.2.6"
   }
