@@ -2,8 +2,6 @@
 // If you're seeing this comment, I haven't organized it yet!
 // In my next large-scale refactor of this I'm going to split this into 2 files, one for get and one for post
 
-
-
 var BlogPost = require('./models/posts');
 var BlogPage = require('./models/pages'); 
 var marked = require('marked');
@@ -25,10 +23,27 @@ module.exports = function(app){
 	app.get('/', function(req,res){
 		//Show post and page list. Homepage!
 
-		BlogPost.find(function(err, thePosts){
+		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
 			console.log(thePosts);
 			res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user});
 		});
+	});
+
+	app.get('/page/:pageNum', function(req, res){
+		//Returns new index based on page num
+
+		console.log("HI I'm The Right thing!");
+		var start = ((+req.params.pageNum-1) * 10) + 1;
+		var end = (+req.params.pageNum * 10);
+		if(typeof(start) !== 'number'){
+			console.log(start);
+			res.send('Not Found');
+		}else{ 
+			BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
+				console.log(thePosts);
+				res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user});
+			});
+		}
 	});
 
 	app.get('/admin/createnew', ensureAuthenticated, function(req,res){
@@ -94,7 +109,7 @@ app.get('/rss', function(req, res){
 		    }
 		});
 
-		BlogPost.find(function(err, thePosts){
+		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
 			for(var blogPost in thePosts){
 				feed.addItem({
 					title: thePosts[blogPost].postName,
@@ -113,7 +128,7 @@ app.get('/rss', function(req, res){
 
 app.get('/:pageSlug', function(req, res){
 		// Pulls a page based on the slug
-
+		console.log("maybe here?");
 		BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
 			if(!thePage){
 				console.log('the error' + err);
@@ -141,32 +156,6 @@ app.get('/blog/:postSlug', function(req,res){
 			}
 		});
 	});
-
-	// Page number code I'm working on.
-	// Thought is to display 10 post titles per,
-	// Pass next and previous buttons through as true/false values based on numbers
-	// Pass
-
-	// app.get('/page/:pnumber', function(req, res){
-	//	var pageNumber = parseInt(req.params.pnumber);
-	//  if (typeof(pageNumber) !== integer){
-		// Return not found
-	//}else if // page number out of range
-	//return not found
-	//}else{
-		//return blog page
-//	}
-	// 	BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
-	// 		if(!thePage){
-	// 			console.log("the error" + err);
-	// 			res.send("Not found");
-	// 		}else{
-	// 			console.log(thePage);
-	// 			console.log(req.params.pageTitle);
-	// 			res.render("page", {title: thePage.pageName, body: thePage.pageBody});
-	// 		}
-	// 	});
-	// });
 
 
 app.post("/api/editcontent", function(req, res){
