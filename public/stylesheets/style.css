@@ -16,3 +16,13 @@ a {
 	width: 600px; 
 	height: 300px
 }
+
+#newerEnt{
+	padding-left: 25px;
+}
+#OlderEnt{
+	padding-left:75px;
+}
+#more{
+	padding-left:25px;
+}

@@ -31,17 +31,16 @@ module.exports = function(app){
 
 	app.get('/page/:pageNum', function(req, res){
 		//Returns new index based on page num
-
-		console.log("HI I'm The Right thing!");
-		var start = ((+req.params.pageNum-1) * 10) + 1;
-		var end = (+req.params.pageNum * 10);
+		var currentPage = +req.params.pageNum;
+		var start = ((currentPage-1) * 10) + 1;
+		var end = (currentPage * 10);
 		if(typeof(start) !== 'number'){
 			console.log(start);
 			res.send('Not Found');
 		}else{ 
 			BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
 				console.log(thePosts);
-				res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user});
+				res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user, currentPage: currentPage, nextPage: currentPage+1, prevPage: currentPage-1});
 			});
 		}
 	});
@@ -128,7 +127,7 @@ app.get('/rss', function(req, res){
 
 app.get('/:pageSlug', function(req, res){
 		// Pulls a page based on the slug
-		console.log("maybe here?");
+	
 		BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
 			if(!thePage){
 				console.log('the error' + err);

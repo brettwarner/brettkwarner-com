@@ -9,3 +9,13 @@ block content
       a(href='blog/#{post.postSlug}')  #{post.postName}
       br/
       br/
+  p
+   if(!currentPage)
+     a(href='/page/2', id='more')  Older Entries
+   if(currentPage === 2)
+     a(href='/page/3', id='olderEnt') Older Entries
+     a(href='/', id='newerEnt') Newer Entries   
+   if(currentPage > 2)
+     a(href='/page/#{nextPage}', id='olderEnt') Older Entries
+     a(href='/page/#{prevPage}', id='newerEnt') Newer Entries
+     
