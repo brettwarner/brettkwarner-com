@@ -1,10 +1,10 @@
 /**
  * Module dependencies.
  */
- var express = require('express');
- var mongoose = require('mongoose');
- var database = require('./config/database');
- var users = require('./app/models/users.js');
+var express = require('express');
+var mongoose = require('mongoose');
+var database = require('./config/database');
+var users = require('./app/models/users.js');
 //var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');  

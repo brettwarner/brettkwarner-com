@@ -24,8 +24,14 @@ module.exports = function(app){
 		//Show post and page list. Homepage!
 
 		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
-			console.log(thePosts);
-			res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user});
+			var pageData = {
+				title: 'DinoLand', 
+				test1: 'Test Here', 
+				posts: thePosts, 
+				user: req.user
+			}
+
+			res.render('index', pageData);
 		});
 	});
 
@@ -40,7 +46,18 @@ module.exports = function(app){
 		}else{ 
 			BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
 				console.log(thePosts);
-				res.render('index', {title: 'DinoLand', test1: 'Test Here', posts: thePosts, user: req.user, currentPage: currentPage, nextPage: currentPage+1, prevPage: currentPage-1});
+
+				var pageData = {
+					title: 'DinoLand', 
+					test1: 'Test Here', 
+					posts: thePosts, 
+					user: req.user, 
+					currentPage: currentPage, 
+					nextPage: currentPage+1, 
+					prevPage: currentPage-1
+				};
+
+				res.render('index', pageData);
 			});
 		}
 	});
@@ -93,7 +110,6 @@ module.exports = function(app){
 
 app.get('/rss', function(req, res){
 		// RSS Feed
-
 		var feed = new Feed({
 			title: 'Brett Warner',
 			description: 'Stuff I break.',
@@ -133,9 +149,14 @@ app.get('/:pageSlug', function(req, res){
 				console.log('the error' + err);
 				res.send('Not found');
 			}else{
-				console.log(thePage);
-				console.log(req.params.pageTitle);
-				res.render('page', {title: thePage.pageName, body: thePage.pageBody, slug: req.params.pageSlug, user: req.user});
+				var pageData = {
+					title: thePage.pageName, 
+					body: thePage.pageBody, 
+					slug: req.params.pageSlug, 
+					user: req.user
+				}
+
+				res.render('page', pageData);
 			}
 		});
 	});
@@ -149,18 +170,22 @@ app.get('/blog/:postSlug', function(req,res){
 				console.log("The error"+ err);
 				res.send('Not found');
 			}else{
-				console.log(thePost);
-				console.log(req.params.postTitle);
-				res.render("post", {title: thePost.postName, slug: req.params.postSlug, body: thePost.postBody,  user: req.user});
+				
+				var pageData = {
+					title: thePost.postName, 
+					slug: req.params.postSlug, 
+					body: thePost.postBody,  
+					user: req.user
+				}
+				
+				res.render("post", pageData);
 			}
 		});
 	});
 
 
 app.post("/api/editcontent", function(req, res){
-		//Edits a piece of content needs to be done still
-
-		console.log("Editing a Piece of Content!")
+		//Edits a piece of content 
 
 		if(req.body['content-type'] === "post"){
 			console.log("This is a post!");
@@ -179,7 +204,6 @@ app.post("/api/editcontent", function(req, res){
 				}
 			});
 		}else if(req.body['content-type'] ==="page"){
-			console.log("this is a page!");
 
 			BlogPage.update({pageSlug: req.body['content-slug']},{
 				pageName: req.body['content-title'],
@@ -187,10 +211,10 @@ app.post("/api/editcontent", function(req, res){
 				pageMarkdown: req.body['content-body']
 			}, function(err, thePage){
 				if(!thePage){
-					console.log("The error"+ err);
+
 					res.send('Page Not found');
 				}else{
-					console.log(thePage);
+
 					res.send('Page Updated!');
 				}
 			});
@@ -223,8 +247,15 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 					console.log("The error"+ err);
 					res.send('Post Not found');
 				}else{
-					console.log(thePost);
-					res.render("editor", {title: thePost.postName, content: thePost.postMarkdown, slug: thePost.postSlug, type: 'post',  user: req.user});
+					var pageData = {
+						title: thePost.postName, 
+						content: thePost.postMarkdown, 
+						slug: thePost.postSlug, 
+						type: 'post',  
+						user: req.user
+					}
+
+					res.render("editor", pageData);
 				}
 			});
 
@@ -236,13 +267,20 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 					console.log('The error'+ err);
 					res.send('Page Not found');
 				}else{
-					console.log(thePage);
-					res.render('editor', {title: thePage.pageName, content: thePage.pageMarkdown, slug: thePage.pageSlug, type: 'page',  user: req.user});
+
+					var pageData = {
+						title: thePage.pageName,
+						content: thePage.pageMarkdown,
+						slug: thePage.pageSlug,
+						type: 'page',
+						user: req.user
+					}
+
+					res.render('editor', pageData);
 				}
 			});
 
 		}else{
-			console.log('Unknown content type');
 			res.send('Type Not Found!');
 		}
 	});

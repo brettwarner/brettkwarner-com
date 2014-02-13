@@ -1,11 +1,11 @@
 body {
-  padding-left: 50px;
-  padding-right: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding-left: 50px;
+	padding-right: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
 }
 
 .pagetitle{
@@ -17,11 +17,18 @@ a {
 	height: 300px
 }
 
+p {
+	font-size: 16px;
+	line-height: 26px;
+	font-family: 'PT Serif', serif;
+	color: #666666;
+}
+
 #newerEnt{
 	padding-left: 25px;
 }
-#OlderEnt{
-	padding-left:75px;
+#olderEnt{
+	padding-left:25px;
 }
 #more{
 	padding-left:25px;
