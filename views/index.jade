@@ -8,7 +8,7 @@ block content
      span#postDate #{post.cleanDate}
      | -
      span#postTitle
-       a(href='blog/#{post.postSlug}')  #{post.postName}
+       a(href='/blog/#{post.postSlug}')  #{post.postName}
        br/
   p
    if(!currentPage)
