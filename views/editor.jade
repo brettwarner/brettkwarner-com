@@ -1,0 +1,15 @@
+extends layout
+
+block content
+   h1.pagetitle Create Your World
+   .col-sm-8
+    form(method='POST', action='/api/editcontent')
+        input(type='hidden', name='content-type', value= type)
+        p Content Title:
+        input(type='text', name='content-title', value= title)
+        p Content Slug:
+        input(type='text', name='content-slug', value= slug)
+        p Content Body:
+        textarea(name='content-body', class='markdowntext') #{content}
+        p
+            button(type='submit') Edit Something Awesome!
