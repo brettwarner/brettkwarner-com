@@ -1,7 +1,6 @@
 // This is my awesomely large and disorganized routes file. 
 // If you're seeing this comment, I haven't organized it yet!
 // In my next large-scale refactor of this I'm going to split this into 2 files, one for get and one for post
-
 var BlogPost = require('./models/posts');
 var BlogPage = require('./models/pages'); 
 var marked = require('marked');
@@ -24,12 +23,23 @@ module.exports = function(app){
 		//Show post and page list. Homepage!
 
 		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
+
+
+			// Change Dates to a more reasonable format
+			for(post in thePosts){
+				var cleanDate = thePosts[post].postDate.toString().split(' ');
+				cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
+				thePosts[post].cleanDate = cleanDate;
+			}
+
+			//Construct the data to go out to the site
 			var pageData = {
 				title: 'DinoLand', 
 				test1: 'Test Here', 
 				posts: thePosts, 
 				user: req.user
 			}
+
 
 			res.render('index', pageData);
 		});
@@ -45,7 +55,12 @@ module.exports = function(app){
 			res.send('Not Found');
 		}else{ 
 			BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
-				console.log(thePosts);
+
+				for(post in thePosts){
+					var cleanDate = thePosts[post].postDate.toString().split(' ');
+					cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
+					thePosts[post].cleanDate = cleanDate;
+				}
 
 				var pageData = {
 					title: 'DinoLand', 
@@ -143,7 +158,7 @@ app.get('/rss', function(req, res){
 
 app.get('/:pageSlug', function(req, res){
 		// Pulls a page based on the slug
-	
+
 		BlogPage.findOne({ pageSlug: req.params.pageSlug}, function(err, thePage){
 			if(!thePage){
 				console.log('the error' + err);

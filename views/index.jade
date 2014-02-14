@@ -4,11 +4,12 @@ block content
   h1 #{siteTitle}
   p Here's what I've been up to...
   for post in posts
-    span#postDate #{post.postDate}
-    span#postTitle
-      a(href='blog/#{post.postSlug}')  #{post.postName}
-      br/
-      br/
+    p
+     span#postDate #{post.cleanDate}
+     | -
+     span#postTitle
+       a(href='blog/#{post.postSlug}')  #{post.postName}
+       br/
   p
    if(!currentPage)
      a(href='/page/2', id='more')  Older Entries
