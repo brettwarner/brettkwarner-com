@@ -1,10 +1,10 @@
 /**
  * Module dependencies.
  */
-var express = require('express');
-var mongoose = require('mongoose');
-var database = require('./config/database');
-var users = require('./app/models/users.js');
+ var express = require('express');
+ var mongoose = require('mongoose');
+
+ var users = require('./app/models/users.js');
 //var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');  
@@ -12,7 +12,10 @@ var path = require('path');
 var app = express();
 var BlogPage = require('./app/models/pages');
 var BlogPost = require('./app/models/posts');
-var hashSecret = require('./config/hashsecret');
+var config = require('./config');
+
+var database = config.DBurl;
+var hashSecret = config.hashSecret;
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -51,39 +54,23 @@ passport.use(new LocalStrategy(
 		users.findOne({username: username}, function(err, user){
 			if(err){ return done(err);}
 			if(!user){
-				console.log("no user");
 				return done(null, false, { message: "Incorrect username"});
 			}
 			if(password !== user.password){
-				console.log("bad pass");
 				return done(null, false, {message: "Incorrect password."});
 			}
 			return done(null, user);
 		});
 	}
 	));
-app.post('/admin/login', 
-	passport.authenticate('local',
-	{
-		successRedirect: 'admin/createnew',
-		failureRedirect: 'admin/login.html'
-	})
-	);
-var monOptions = {
-	server:{
-		auto_reconnect: true,
-		poolSize: 10,
-		socketOptions:{
-			keepAlive: 1
-		}
-	},
-	db: {
-		numberOfRetries: 10,
-		retryMiliSeconds: 1000
-	}
-}
+app.post('/admin/login', passport.authenticate('local',
+{
+	successRedirect: 'admin/createnew',
+	failureRedirect: 'admin/login.html'
+})
+);
 
-mongoose.connect(database.url, monOptions);
+mongoose.connect(database, config.monOptions);
 
 // development only
 if ('development' == app.get('env')) {
@@ -113,8 +100,6 @@ app.use(function(req, res, next){
   // default to plain-text. send()
   res.type('txt').send('Not found');
 });
-
-// End of Weird Error Handling code
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
