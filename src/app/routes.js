@@ -1,12 +1,12 @@
 // This is my awesomely large and disorganized routes file. 
-// If you're seeing this comment, I haven't organized it yet!
-// In my next large-scale refactor of this I'm going to split this into 2 files, one for get and one for post
-var BlogPost = require('./models/posts');
+// Started moving all route handlers into their own files. Should make this eaier to read
+
 var BlogPage = require('./models/pages'); 
 var marked = require('marked');
-var Feed = require('feed');
-var ensureAuthenticated = require('./ensureAuthenticated');
+var ensureAuthenticated = require('./middleware/ensureAuthenticated');
 
+var homePageHandler = require('./handlers/homePageHandler');
+var rssHandler = require('./handlers/rssHandler');
 marked.setOptions({
 	renderer: new marked.Renderer(),
 	gfm: true,
@@ -19,31 +19,8 @@ marked.setOptions({
 });
 
 module.exports = function(app){
-	app.get('/', function(req,res){
-		//Show post and page list. Homepage!
 
-		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
-
-
-			// Change Dates to a more reasonable format
-			for(var post in thePosts){
-				var cleanDate = thePosts[post].postDate.toString().split(' ');
-				cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
-				thePosts[post].cleanDate = cleanDate;
-			}
-
-			//Construct the data to go out to the site
-			var pageData = {
-				title: 'DinoLand', 
-				test1: 'Test Here', 
-				posts: thePosts, 
-				user: req.user
-			};
-
-
-			res.render('index', pageData);
-		});
-	});
+	app.get('/', homePageHandler);
 
 	app.get('/page/:pageNum', function(req, res){
 		//Returns new index based on page num
@@ -120,37 +97,7 @@ module.exports = function(app){
 		}
 	});
 
-app.get('/rss', function(req, res){
-		// RSS Feed
-		var feed = new Feed({
-			title: 'Brett Warner',
-			description: 'Stuff I break.',
-			link: 'http://www.brettkwarner.com',
-			//image: 'image'
-			copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
-
-			author: {
-				name: 'Brett Warner',
-				email: 'brett@brettkwarner.com',
-				link: 'http://www.brettkwarner.com'
-			}
-		});
-
-		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
-			for(var blogPost in thePosts){
-				feed.addItem({
-					title: thePosts[blogPost].postName,
-					link: 'http://www.brettkwarner.com' + thePosts[blogPost].postSlug,
-					description: thePosts[blogPost].postBody,
-					date: thePosts[blogPost].postDate
-				});
-			}
-			//res.set('Content-Type', 'text/xml');
-			res.set('Content-Type', 'application/rss+xml');
-			// Sending the feed as a response
-			res.send(feed.render('rss-2.0'));
-		});
-	});
+app.get('/rss', rssHandler);
 
 
 app.get('/:pageSlug', function(req, res){
