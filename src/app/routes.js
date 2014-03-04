@@ -76,16 +76,13 @@ module.exports = function(app){
 			});
 		}
 	});
-
 	app.get('/admin/createnew', ensureAuthenticated, function(req,res){
 		// Admin Page
 
 		res.render('admin', {title: 'Success!', user: req.user});
 	});
-
 	app.post('/api/addcontent', ensureAuthenticated, function(req, res){
 		// API to Add content
-
 		console.log('Adding Something Awesome!');
 		console.log(req.body);
 		if(req.body['content-type'] === "post"){
