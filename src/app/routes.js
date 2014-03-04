@@ -1,5 +1,5 @@
 // This is my awesomely large and disorganized routes file. 
-// Started moving all route handlers into their own files. Should make this eaier to read
+// Started moving all route handlers into their own files. Should make this eaier to read when 100% finished
 
 var BlogPage = require('./models/pages'); 
 var marked = require('marked');

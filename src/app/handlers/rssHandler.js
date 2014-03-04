@@ -30,4 +30,4 @@ module.exports = function(req, res){
 			// Sending the feed as a response
 			res.send(feed.render('rss-2.0'));
 		});
-}
+};
