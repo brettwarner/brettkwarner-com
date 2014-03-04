@@ -19,4 +19,4 @@ module.exports = {
 			retryMiliSeconds: 1000
 		}
 	}
-}
+};

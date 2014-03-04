@@ -26,7 +26,7 @@ module.exports = function(app){
 
 
 			// Change Dates to a more reasonable format
-			for(post in thePosts){
+			for(var post in thePosts){
 				var cleanDate = thePosts[post].postDate.toString().split(' ');
 				cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
 				thePosts[post].cleanDate = cleanDate;
@@ -56,7 +56,7 @@ module.exports = function(app){
 		}else{ 
 			BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
 
-				for(post in thePosts){
+				for(var post in thePosts){
 					var cleanDate = thePosts[post].postDate.toString().split(' ');
 					cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
 					thePosts[post].cleanDate = cleanDate;
