@@ -38,7 +38,7 @@ module.exports = function(app){
 				test1: 'Test Here', 
 				posts: thePosts, 
 				user: req.user
-			}
+			};
 
 
 			res.render('index', pageData);
@@ -102,7 +102,7 @@ module.exports = function(app){
 					res.send(err);
 				BlogPost.find(function(err, posts){
 					res.send(posts);
-				})
+				});
 			});
 		}else if(req.body['content-type'] ==="page"){
 			console.log('content type page');
@@ -118,7 +118,7 @@ module.exports = function(app){
 					res.send(err);
 				BlogPage.find(function(err,pages){
 					res.send(pages);
-				})
+				});
 			});
 		}
 	});
@@ -169,7 +169,7 @@ app.get('/:pageSlug', function(req, res){
 					body: thePage.pageBody, 
 					slug: req.params.pageSlug, 
 					user: req.user
-				}
+				};
 
 				res.render('page', pageData);
 			}
@@ -191,7 +191,7 @@ app.get('/blog/:postSlug', function(req,res){
 					slug: req.params.postSlug, 
 					body: thePost.postBody,  
 					user: req.user
-				}
+				};
 				
 				res.render("post", pageData);
 			}
@@ -245,7 +245,7 @@ app.post("/api/editcontent", function(req, res){
 app.post("/api/delete", function(req, res){
 		//Deletes a post needs to be done still
 
-		console.log("Deleting a Post!")
+		console.log("Deleting a Post!");
 	});
 
 
@@ -268,7 +268,7 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 						slug: thePost.postSlug, 
 						type: 'post',  
 						user: req.user
-					}
+					};
 
 					res.render("editor", pageData);
 				}
@@ -289,7 +289,7 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 						slug: thePage.pageSlug,
 						type: 'page',
 						user: req.user
-					}
+					};
 
 					res.render('editor', pageData);
 				}
@@ -299,7 +299,7 @@ app.get('/admin/edit/:type-:slug', ensureAuthenticated, function(req, res){
 			res.send('Type Not Found!');
 		}
 	});
-}
+};
 
 
 
