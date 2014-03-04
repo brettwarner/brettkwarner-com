@@ -129,14 +129,14 @@ app.get('/rss', function(req, res){
 			title: 'Brett Warner',
 			description: 'Stuff I break.',
 			link: 'http://www.brettkwarner.com',
-		    //image: 'image'
-		    copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
+			//image: 'image'
+			copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
 
-		    author: {
-		    	name: 'Brett Warner',
-		    	email: 'brett@brettkwarner.com',
-		    	link: 'http://www.brettkwarner.com'
-		    }
+			author: {
+				name: 'Brett Warner',
+				email: 'brett@brettkwarner.com',
+				link: 'http://www.brettkwarner.com'
+			}
 		});
 
 		BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
@@ -148,11 +148,11 @@ app.get('/rss', function(req, res){
 					date: thePosts[blogPost].postDate
 				});
 			}
-	      	//res.set('Content-Type', 'text/xml');
-	      	res.set('Content-Type', 'application/rss+xml');
-            // Sending the feed as a response
-            res.send(feed.render('rss-2.0'));
-        });
+			//res.set('Content-Type', 'text/xml');
+			res.set('Content-Type', 'application/rss+xml');
+			// Sending the feed as a response
+			res.send(feed.render('rss-2.0'));
+		});
 	});
 
 
