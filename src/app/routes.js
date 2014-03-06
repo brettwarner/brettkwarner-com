@@ -1,6 +1,6 @@
 
 
-//Middlewares
+//Middleware
 var ensureAuthenticated = require('./middleware/ensureAuthenticated');
 
 //Handlers
@@ -31,7 +31,7 @@ module.exports = function(app){
 	app.post('/api/addcontent', ensureAuthenticated, addContentHandler);
 	app.post("/api/editcontent", ensureAuthenticated, editContentHandler);
 	app.post("/api/delete", function(req, res){
-		//Deletes a post needs to be done still
+	    //Deletes a post needs to be done still
 		console.log("Deleting a Post!");
 	});
 };
