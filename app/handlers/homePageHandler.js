@@ -1,5 +1,7 @@
+'use strict';
+
 var BlogPost = require('../models/posts');
-var BlogPage = require('../models/pages'); 
+var BlogPage = require('../models/pages');
 module.exports = function(req,res){
 	//Show post and page list. Homepage!
 
@@ -14,9 +16,9 @@ module.exports = function(req,res){
 
 		//Construct the data to go out to the site
 		var pageData = {
-			title: 'DinoLand', 
-			test1: 'Test Here', 
-			posts: thePosts, 
+			title: 'DinoLand',
+			test1: 'Test Here',
+			posts: thePosts,
 			user: req.user
 		};
 

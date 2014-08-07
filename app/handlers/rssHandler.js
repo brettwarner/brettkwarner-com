@@ -1,3 +1,5 @@
+'use strict';
+
 var BlogPost = require('../models/posts');
 var Feed = require('feed');
 module.exports = function(req, res){

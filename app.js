@@ -1,12 +1,10 @@
-/**
- * Module dependencies.
- */
+'use strict';
+
 var express = require('express');
 var mongoose = require('mongoose');
 var users = require('./app/models/users.js');
-//var routes = require('./routes');
-//var user = require('./routes/user');
-var http = require('http');  
+
+var http = require('http');
 var path = require('path');
 var app = express();
 var BlogPage = require('./app/models/pages');
@@ -15,6 +13,7 @@ var config = require('./config');
 
 var database = config.DBurl;
 var hashSecret = config.hashSecret;
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -26,17 +25,15 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 //Passport Stuff
-var passport = require("passport");
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-// Not sure if I need this
 app.use(express.cookieParser());
 app.use(express.session({secret: hashSecret}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(app.router); 
+app.use(app.router);
 
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
@@ -53,10 +50,10 @@ passport.use(new LocalStrategy(
 		users.findOne({username: username}, function(err, user){
 			if(err){ return done(err);}
 			if(!user){
-				return done(null, false, { message: "Incorrect username"});
+				return done(null, false, { message: 'Incorrect username' });
 			}
 			if(password !== user.password){
-				return done(null, false, {message: "Incorrect password."});
+				return done(null, false, { message: 'Incorrect password.' });
 			}
 			return done(null, user);
 		});

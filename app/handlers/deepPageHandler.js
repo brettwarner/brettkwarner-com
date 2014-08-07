@@ -1,3 +1,5 @@
+'use strict';
+
 var BlogPost = require('../models/posts');
 module.exports = function(req, res){
 	//Returns new index based on page num
@@ -7,7 +9,7 @@ module.exports = function(req, res){
 	if(typeof(start) !== 'number'){
 		console.log(start);
 		res.send('Not Found');
-	}else{ 
+	} else {
 		BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
 
 			for(var post in thePosts){
@@ -17,12 +19,12 @@ module.exports = function(req, res){
 			}
 
 			var pageData = {
-				title: 'DinoLand', 
-				test1: 'Test Here', 
-				posts: thePosts, 
-				user: req.user, 
-				currentPage: currentPage, 
-				nextPage: currentPage+1, 
+				title: 'DinoLand',
+				test1: 'Test Here',
+				posts: thePosts,
+				user: req.user,
+				currentPage: currentPage,
+				nextPage: currentPage+1,
 				prevPage: currentPage-1
 			};
 

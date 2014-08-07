@@ -1,4 +1,4 @@
-
+'use strict';
 
 //Middleware
 var ensureAuthenticated = require('./middleware/ensureAuthenticated');
@@ -26,12 +26,12 @@ module.exports = function(app){
 		// Admin Page
 		res.render('admin', {title: 'Success!', user: req.user});
 	});
-	
+
 	// APIs
 	app.post('/api/addcontent', ensureAuthenticated, addContentHandler);
 	app.post("/api/editcontent", ensureAuthenticated, editContentHandler);
 	app.post("/api/delete", function(req, res){
-	    //Deletes a post needs to be done still
+		//Deletes a post needs to be done still
 		console.log("Deleting a Post!");
 	});
 };

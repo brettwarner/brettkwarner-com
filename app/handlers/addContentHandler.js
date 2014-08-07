@@ -1,3 +1,5 @@
+'use strict';
+
 var BlogPage = require('../models/pages');
 var BlogPost = require('../models/posts');
 var marked = require('marked');

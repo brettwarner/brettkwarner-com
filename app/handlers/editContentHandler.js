@@ -1,9 +1,11 @@
+'use strict';
+
 var BlogPage = require('../models/pages');
 var BlogPost = require('../models/posts');
 var marked = require('marked');
 
 module.exports = function(req, res){
-	//Edits a piece of content 
+	//Edits a piece of content
 
 	if(req.body['content-type'] === "post"){
 		console.log("This is a post!");
@@ -41,5 +43,5 @@ module.exports = function(req, res){
 		console.log("Unknown content type");
 		res.send("Type Not Found!");
 	}
-	
+
 };

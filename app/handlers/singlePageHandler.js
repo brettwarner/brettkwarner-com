@@ -1,3 +1,5 @@
+'use strict';
+
 var BlogPage = require('../models/pages');
 
 module.exports = function(req, res){
@@ -9,9 +11,9 @@ module.exports = function(req, res){
 			res.send('Not found');
 		}else{
 			var pageData = {
-				title: thePage.pageName, 
-				body: thePage.pageBody, 
-				slug: req.params.pageSlug, 
+				title: thePage.pageName,
+				body: thePage.pageBody,
+				slug: req.params.pageSlug,
 				user: req.user
 			};
 

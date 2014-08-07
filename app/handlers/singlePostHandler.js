@@ -1,3 +1,5 @@
+'use strict';
+
 var BlogPost = require('../models/posts');
 
 module.exports = function(req,res){
@@ -10,9 +12,9 @@ module.exports = function(req,res){
 		}else{
 
 			var pageData = {
-				title: thePost.postName, 
-				slug: req.params.postSlug, 
-				body: thePost.postBody,  
+				title: thePost.postName,
+				slug: req.params.postSlug,
+				body: thePost.postBody,
 				user: req.user
 			};
 
