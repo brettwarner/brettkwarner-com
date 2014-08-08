@@ -1,13 +1,13 @@
 'use strict';
 
 var BlogPost = require('../models/posts');
+
 module.exports = function(req, res){
 	//Returns new index based on page num
 	var currentPage = +req.params.pageNum;
 	var start = ((currentPage-1) * 10) + 1;
 	var end = (currentPage * 10);
 	if(typeof(start) !== 'number'){
-		console.log(start);
 		res.send('Not Found');
 	} else {
 		BlogPost.find().sort({postDate: -1}).skip(start).limit(end).exec(function(err, thePosts){
@@ -24,8 +24,8 @@ module.exports = function(req, res){
 				posts: thePosts,
 				user: req.user,
 				currentPage: currentPage,
-				nextPage: currentPage+1,
-				prevPage: currentPage-1
+				nextPage: currentPage + 1,
+				prevPage: currentPage - 1
 			};
 
 			res.render('index', pageData);

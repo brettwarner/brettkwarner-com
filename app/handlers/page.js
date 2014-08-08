@@ -9,7 +9,7 @@ module.exports = function(req, res){
 		if(!thePage){
 			console.log('the error' + err);
 			res.send('Not found');
-		}else{
+		} else {
 			var pageData = {
 				title: thePage.pageName,
 				body: thePage.pageBody,

@@ -10,9 +10,9 @@ module.exports = function(req, res){
 
 		BlogPost.findOne({postSlug: req.params.slug}, function(err, thePost){
 			if(!thePost){
-				console.log("The error"+ err);
+				console.log('The error' + err);
 				res.send('Post Not found');
-			}else{
+			} else {
 				var pageData = {
 					title: thePost.postName,
 					content: thePost.postMarkdown,
@@ -21,17 +21,17 @@ module.exports = function(req, res){
 					user: req.user
 				};
 
-				res.render("editor", pageData);
+				res.render('editor', pageData);
 			}
 		});
+	}
 
-	}else if(req.params.type ==='page'){
-
+	if(req.params.type === 'page'){
 		BlogPage.findOne({pageSlug: req.params.slug}, function(err, thePage){
 			if(!thePage){
 				console.log('The error'+ err);
 				res.send('Page Not found');
-			}else{
+			} else {
 
 				var pageData = {
 					title: thePage.pageName,
@@ -44,7 +44,7 @@ module.exports = function(req, res){
 				res.render('editor', pageData);
 			}
 		});
-	}else{
-		res.send('Type Not Found!');
 	}
+
+	res.send('Type Not Found!');
 };

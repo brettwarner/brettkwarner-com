@@ -7,8 +7,7 @@ var marked = require('marked');
 module.exports = function(req, res){
 	//Edits a piece of content
 
-	if(req.body['content-type'] === "post"){
-		console.log("This is a post!");
+	if(req.body['content-type'] === 'post'){
 
 		BlogPost.update({postSlug: req.body['content-slug']},{
 			postName: req.body['content-title'],
@@ -16,14 +15,16 @@ module.exports = function(req, res){
 			postMarkdown: req.body['content-body']
 		}, function(err, thePost){
 			if(!thePost){
-				console.log("The error"+ err);
+				console.log('The error' + err);
 				res.send('Post Not found');
 			}else{
 				console.log(thePost);
 				res.send('Post Updated!');
 			}
 		});
-	}else if(req.body['content-type'] ==="page"){
+	}
+
+	if(req.body['content-type'] === 'page'){
 
 		BlogPage.update({pageSlug: req.body['content-slug']},{
 			pageName: req.body['content-title'],
@@ -31,17 +32,12 @@ module.exports = function(req, res){
 			pageMarkdown: req.body['content-body']
 		}, function(err, thePage){
 			if(!thePage){
-
 				res.send('Page Not found');
-			}else{
-
+			} else {
 				res.send('Page Updated!');
 			}
 		});
 
-	}else{
-		console.log("Unknown content type");
-		res.send("Type Not Found!");
 	}
-
+	res.send('Not Found!');
 };

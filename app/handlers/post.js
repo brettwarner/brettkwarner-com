@@ -7,9 +7,9 @@ module.exports = function(req,res){
 
 	BlogPost.findOne({ postSlug: req.params.postSlug }, function(err, thePost){
 		if(!thePost){
-			console.log("The error"+ err);
+			console.log('The error'+ err);
 			res.send('Not found');
-		}else{
+		} else {
 
 			var pageData = {
 				title: thePost.postName,
@@ -18,7 +18,7 @@ module.exports = function(req,res){
 				user: req.user
 			};
 
-			res.render("post", pageData);
+			res.render('post', pageData);
 		}
 	});
 };
