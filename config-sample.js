@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	siteName: "Brett Warner",
 	siteAuthor: "Brett Warner",

@@ -1,28 +1,37 @@
 'use strict';
 
-var BlogPost = require('../models/posts');
-var BlogPage = require('../models/pages');
+var db = require('../../lib/database');
 
-module.exports = function(req, res){
-  //Show post and page list. Homepage!
+function homepage(req, res){
 
-  BlogPost.find().sort({postDate: -1}).limit(10).exec(function(err, thePosts){
+  var currentPage = +req.params.pageNum || 1;
 
-    // Change Dates to a more reasonable format
-    for(var post in thePosts){
-      var cleanDate = thePosts[post].postDate.toString().split(' ');
-      cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
-      thePosts[post].cleanDate = cleanDate;
-    }
+  db('content')
+    .where({
+      type: 'post'
+    })
+    .orderBy('created_at', 'DESC')
+    .offset((currentPage - 1) * 10)
+    .limit(10)
+    .then(function(posts){
+      for(var post in posts){
+        var cleanDate = posts[post].created_at.toString().split(' ');
+        cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
+        posts[post].cleanDate = cleanDate;
+      }
 
-    //Construct the data to go out to the site
-    var pageData = {
-      title: 'DinoLand',
-      test1: 'Test Here',
-      posts: thePosts,
-      user: req.user
-    };
+      var pageData = {
+        title: 'DinoLand',
+        test1: 'Test Here',
+        posts: posts,
+        currentPage: currentPage,
+        nextPage: currentPage + 1,
+        prevPage: currentPage - 1
+        // user: req.user
+      };
 
-    res.render('index', pageData);
-  });
-};
+      res.render('index', pageData);
+    });
+}
+
+module.exports = homepage;

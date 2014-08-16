@@ -1,50 +1,28 @@
 'use strict';
 
-var BlogPage = require('../models/pages');
-var BlogPost = require('../models/posts');
-module.exports = function(req, res){
-	// Edits a post or page based on type passed through!
+var db = require('../../lib/database');
 
-	if(req.params.type === 'post'){
-		console.log('This is a post!');
+function editor(req, res){
 
-		BlogPost.findOne({postSlug: req.params.slug}, function(err, thePost){
-			if(!thePost){
-				console.log('The error' + err);
-				res.send('Post Not found');
-			} else {
-				var pageData = {
-					title: thePost.postName,
-					content: thePost.postMarkdown,
-					slug: thePost.postSlug,
-					type: 'post',
-					user: req.user
-				};
+  db('content')
+    .select('*')
+    .where({ slug: req.params.slug })
+    .limit(1)
+    .spread(function(content){
+      var pageData = {
+        title: content.title,
+        content: content.markdown,
+        slug: content.slug,
+        type: content.type,
+        // user: req.user
+      };
 
-				res.render('editor', pageData);
-			}
-		});
-	}
+      res.render('editor', pageData);
+    })
+    .otherwise(function(err){
+      console.log(err);
+      res.send('Not Found!');
+    });
+}
 
-	if(req.params.type === 'page'){
-		BlogPage.findOne({pageSlug: req.params.slug}, function(err, thePage){
-			if(!thePage){
-				console.log('The error'+ err);
-				res.send('Page Not found');
-			} else {
-
-				var pageData = {
-					title: thePage.pageName,
-					content: thePage.pageMarkdown,
-					slug: thePage.pageSlug,
-					type: 'page',
-					user: req.user
-				};
-
-				res.render('editor', pageData);
-			}
-		});
-	}
-
-	res.send('Type Not Found!');
-};
+module.exports = editor;

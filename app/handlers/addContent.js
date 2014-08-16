@@ -1,53 +1,31 @@
 'use strict';
 
-var BlogPage = require('../models/pages');
-var BlogPost = require('../models/posts');
+var db = require('../../lib/database');
 var marked = require('marked');
 
-module.exports = function(req, res){
-	// API to Add content
+function addContent(req, res){
 
-	if(req.body['content-type'] === 'post'){
-		console.log('content type post');
+  var content = {
+    type: req.body['content-type'],
+    title: req.body['content-title'],
+    slug: req.body['content-slug'],
+    created_at : new Date(),
+    user_id : 1,
+    body: marked(req.body['content-body']),
+    markdown: req.body['content-body']
+  };
 
-    var postDetails = {
-      postName: req.body['content-title'],
-      postSlug: req.body['content-slug'],
-      postDate : new Date(),
-      postAuthor : 'Brett Warner',
-      postBody: marked(req.body['content-body']),
-      postMarkdown: req.body['content-body']
-    };
+  db('content')
+    .insert(content)
+    .then(function(reult){
+      return db('content').select('*');
+    })
+    .then(function(posts){
+      res.send(posts);
+    })
+    .otherwise(function(err){
+      res.send(err);
+    });
+}
 
-		BlogPost.create(postDetails, function(err, success){
-			if(err)
-				res.send(err);
-			BlogPost.find(function(err, posts){
-				res.send(posts);
-			});
-		});
-	}
-
-  if(req.body['content-type'] ==='page'){
-		console.log('content type page');
-
-    var pageDetails = {
-      pageName: req.body['content-title'],
-      pageSlug: req.body['content-slug'],
-      pageDate : new Date(),
-      pageAuthor : 'Brett Warner',
-      pageBody: marked(req.body['content-body']),
-      pageMarkdown: req.body['content-body']
-    };
-
-		BlogPage.create(pageDetails, function(err, success){
-			if(err) {
-				res.send(err);
-			}
-
-			BlogPage.find(function(err,pages){
-				res.send(pages);
-			});
-		});
-	}
-};
+module.exports = addContent;

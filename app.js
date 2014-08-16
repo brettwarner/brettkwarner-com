@@ -1,20 +1,13 @@
 'use strict';
 
-var express = require('express');
-var mongoose = require('mongoose');
-var users = require('./app/models/users.js');
-
 var http = require('http');
 var path = require('path');
-var app = express();
-var BlogPage = require('./app/models/pages');
-var BlogPost = require('./app/models/posts');
+var express = require('express');
+
 var config = require('./config');
 
-var database = config.DBurl;
-var hashSecret = config.hashSecret;
-
 // all environments
+var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -25,50 +18,10 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Passport Stuff
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-
 app.use(express.cookieParser());
-app.use(express.session({secret: hashSecret}));
-app.use(passport.initialize());
-app.use(passport.session());
+//TODO: Move into config
+
 app.use(app.router);
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  users.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(new LocalStrategy(
-  function(username, password, done){
-    users.findOne({username: username}, function(err, user){
-      if(err){
-        return done(err);
-      }
-      if(!user){
-        return done(null, false, { message: 'Incorrect username' });
-      }
-      if(password !== user.password){
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-  ));
-app.post('/admin/login', passport.authenticate('local',
-{
-  successRedirect: 'admin/createnew',
-  failureRedirect: 'admin/login.html'
-})
-);
-
-mongoose.connect(database, config.monOptions);
 
 // development only
 if ('development' == app.get('env')) {
