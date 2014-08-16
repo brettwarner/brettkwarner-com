@@ -1,21 +1,26 @@
 'use strict';
 
-var db = require('../../lib/database');
 var Feed = require('feed');
+var _ = require('lodash');
+
+var db = require('../../lib/database');
+var config = require('../../config');
+
+var currentYear = new Date().getFullYear();
 
 function rssFeed(req, res){
  //RSS feed
  var feed = new Feed({
-   title: 'Brett Warner',
-   description: 'Stuff I break.',
-   link: 'http://www.brettkwarner.com',
+   title: config.siteTitle,
+   description: config.siteDescription,
+   link: config.siteUrl,
      //image: 'image'
-     copyright: 'Copyright @ 2014 Brett Warner. All rights reserved',
+     copyright: 'Copyright @' + currentYear + ' ' + config.siteAuthor +'. All rights reserved',
 
      author: {
-       name: 'Brett Warner',
-       email: 'brett@brettkwarner.com',
-       link: 'http://www.brettkwarner.com'
+       name: config.siteAuthor,
+       email: config.siteAuthorEmail,
+       link: config.siteUrl
      }
  });
 
@@ -26,16 +31,15 @@ function rssFeed(req, res){
     .orderBy('created_at', 'DESC')
     .limit(10)
     .then(function(posts){
-      for(var blogPost in posts){
+      _.forEach(posts, function(post){
        feed.addItem({
-         title: posts[blogPost].postName,
-         link: 'http://www.brettkwarner.com/' + posts[blogPost].slug,
-         description: posts[blogPost].body,
-         date: posts[blogPost].created_at
+         title: post.title,
+         link: config.siteUrl + '/' + post.slug,
+         description: post.body,
+         date: post.created_at
        });
-      }
+      });
       res.set('Content-Type', 'application/rss+xml');
-       // Sending the feed as a response
       res.send(feed.render('rss-2.0'));
     });
 }

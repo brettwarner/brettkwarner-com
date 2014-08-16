@@ -1,5 +1,9 @@
 'use strict';
 
+var _ = require('lodash');
+var moment = require('moment');
+
+var config = require('../../config');
 var db = require('../../lib/database');
 
 function homepage(req, res){
@@ -13,16 +17,15 @@ function homepage(req, res){
     .orderBy('created_at', 'DESC')
     .offset((currentPage - 1) * 10)
     .limit(10)
-    .then(function(posts){
-      for(var post in posts){
-        var cleanDate = posts[post].created_at.toString().split(' ');
-        cleanDate = cleanDate[0] + ' ' + cleanDate[1] + ' ' + cleanDate[2] + ' ' + cleanDate[3];
-        posts[post].cleanDate = cleanDate;
-      }
+    .then(function(rawPosts){
+
+      var posts = _.map(rawPosts, function(post){
+        post.cleanDate = moment(post.created_at).format('dddd, MMMM Do YYYY');
+        return post;
+      });
 
       var pageData = {
-        title: 'DinoLand',
-        test1: 'Test Here',
+        title: config.siteTitle,
         posts: posts,
         currentPage: currentPage,
         nextPage: currentPage + 1,

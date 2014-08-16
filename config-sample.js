@@ -1,24 +1,10 @@
 'use strict';
 
 module.exports = {
-	siteName: "Brett Warner",
-	siteAuthor: "Brett Warner",
-	DBurl : "mongodb://USERNAME:PASSWORD@mongo.onmodulus.net:12345/XYXAH",
-	hashSecret: 'hashsecret',
-
-	// You shouldn't need to change anything below here
-
-	monOptions : {
-		server:{
-			auto_reconnect: true,
-			poolSize: 10,
-			socketOptions:{
-				keepAlive: 1
-			}
-		},
-		db: {
-			numberOfRetries: 10,
-			retryMiliSeconds: 1000
-		}
-	}
+  siteTitle: 'My Awesome Blog',
+	siteAuthor: 'YOUR NAME',
+	siteUrl: 'http://www.warbrett.com',
+  siteAuthorEmail: 'you@email.com',
+  siteDescription: 'Description of the site goes here.',
+  databaseUrl: process.env.DATABASE_URL
 };

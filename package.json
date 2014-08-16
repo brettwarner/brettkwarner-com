@@ -1,7 +1,11 @@
 {
   "name": "warbrett-com",
   "version": "0.0.1",
-  "private": true,
+  "author": {
+    "name": "Brett Warner",
+    "email": "bkwarner22@gmail.com",
+    "url": "https://github.com/warbrett"
+  },
   "scripts": {
     "start": "node app.js"
   },
@@ -10,11 +14,10 @@
     "feed": "~0.2.6",
     "jade": "*",
     "knex": "^0.6.22",
+    "lodash": "^2.4.1",
     "marked": "~0.3.*",
-    "passport": "~0.2.*",
-    "passport-local": "*",
-    "pg": "^3.4.1",
-    "sqlite3": "^2.2.7"
+    "moment": "^2.8.1",
+    "pg": "^3.4.1"
   },
   "devDependencies": {
     "gulp": "~3.5.5",

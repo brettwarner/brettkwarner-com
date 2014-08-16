@@ -1,13 +1,9 @@
 'use strict';
 
-//Middleware
-// var ensureAuthenticated = require('./middleware/ensureAuthenticated');
-
 //Handlers
 var indexHandler = require('./handlers/index');
 var rssHandler = require('./handlers/rss');
 var addContentHandler = require('./handlers/addContent');
-var deepPageHandler = require('./handlers/deepPage');
 var singleHandler = require('./handlers/single');
 var editContentHandler = require('./handlers/editContent');
 var editorHandler = require('./handlers/editor');
