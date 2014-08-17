@@ -3,12 +3,19 @@
 var db = require('../lib/database');
 
 function single(req, res){
-  // Pulls a page based on the slug
-  //TODO: Only grab posts on /blog/slug, otherwise grab page on /slug
+
+  var contentType = 'page';
+
+  if(req.route.path === '/blog/:slug'){
+    contentType = 'post';
+  }
 
   db('content')
     .select('*')
-    .where({ slug: req.params.slug })
+    .where({
+      slug: req.params.slug,
+      type: contentType
+    })
     .limit(1)
     .spread(function(content){
       var pageData = {
