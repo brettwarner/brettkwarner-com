@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 
 var config = require('./config');
-var errorHandler = require('./app/handlers/error');
+var errorHandler = require('./handlers/error');
 
 var app = express();
 
@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-require('./app/routes.js')(app);
+require('./routes.js')(app);
 app.use(errorHandler);
 
 http.createServer(app).listen(app.get('port'), function(){

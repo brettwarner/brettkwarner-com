@@ -3,8 +3,8 @@
 var Feed = require('feed');
 var _ = require('lodash');
 
-var db = require('../../lib/database');
-var config = require('../../config');
+var db = require('../lib/database');
+var config = require('../config');
 
 var currentYear = new Date().getFullYear();
 

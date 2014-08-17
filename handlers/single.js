@@ -1,6 +1,6 @@
 'use strict';
 
-var db = require('../../lib/database');
+var db = require('../lib/database');
 
 function single(req, res){
   // Pulls a page based on the slug

@@ -1,6 +1,6 @@
 'use strict';
 
-var db = require('../../lib/database');
+var db = require('../lib/database');
 var marked = require('marked');
 
 function editContent(req, res){
