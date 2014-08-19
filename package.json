@@ -7,7 +7,10 @@
     "url": "https://github.com/warbrett"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "migrate": "mgrt up",
+    "reverse": "mgrt down",
+    "refresh": "mgrt refresh"
   },
   "repository": {
     "type": "git",
@@ -21,6 +24,7 @@
     "knex": "^0.6.22",
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
+    "mgrt": "^0.2.6",
     "moment": "^2.8.1",
     "pg": "^3.4.1",
     "require-dir": "^0.1.0",
