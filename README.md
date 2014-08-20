@@ -7,10 +7,10 @@ Uses: Node, Express, Knex, Postgres, Jade, Passport, Marked, feed, and more.  Cu
 
 1. Git pull the repo
 
-2. Npm install
+2. npm install
 
 3. Rename config-sample to config, update everything
 
-4. Npm migrate
+4. npm run migrate
 
 5. ...?
