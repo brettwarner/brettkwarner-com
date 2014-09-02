@@ -1,8 +1,7 @@
 extends layout
 
 block content
-  h1 #{siteTitle}
-  p Here's what I've been up to...
+  p #{siteDescription}
   for post in posts
     p
      span#date #{post.cleanDate}
@@ -11,10 +10,11 @@ block content
        a(href='/blog/#{post.slug}')  #{post.title}
        br/
   p
-   if(currentPage === 1)
+   if((currentPage === 1) && (posts === 10))
      a(href='/page/2', id='more')  Older Entries
-   if(currentPage === 2)
+   if((currentPage === 2) && (posts === 10))
      a(href='/page/3', id='olderEnt') Older Entries
+   if(currentPage === 2)
      a(href='/', id='newerEnt') Newer Entries
    if((currentPage > 2) && (posts === 10))
      a(href='/page/#{nextPage}', id='olderEnt') Older Entries

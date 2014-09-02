@@ -36,6 +36,11 @@ passport.serializeUser(serializeUser);
 passport.deserializeUser(deserializeUser);
 passport.use(new localStrategy(authenticationStrategy));
 
+app.locals = {
+  siteTitle: config.siteTitle,
+  siteDescription: config.siteDescription
+};
+
 require('./routes.js')(app, passport);
 
 app.use(errorHandler);
